@@ -38,7 +38,7 @@ userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 }
 
-userSchema.statics.hashPassword = async function (password) {
+userSchema.statics.hasedpassword = async function (password) {
     return await bcrypt.hash(password, 10);
 }
 
