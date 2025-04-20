@@ -12,8 +12,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<UserLogin />} />
         <Route path="/signup" element={<UserSignup />} />
-        <Route path="/captain/login" element={<CaptainLogin />} />
-        <Route path="/captain/signup" element={<CaptainSignup />} />
+        <Route path="/captain-login" element={<CaptainLogin />} />
+        <Route path="/captain-signup" element={<CaptainSignup />} />
         <Route path="*" element={<div>404 Not Found</div>} />
 
       </Routes>
