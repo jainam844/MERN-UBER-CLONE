@@ -2,7 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectToDb from "./db/db.js";
-import userRoutes from './routes/user.routes.js'
+import userRoutes from './routes/user.routes.js';
+import captainRoutes from './routes/captain.routes.js'
+
 import cookieParser from 'cookie-parser'
 dotenv.config();
 connectToDb();
@@ -19,5 +21,6 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 app.use('/users', userRoutes)
+app.use('/captains', captainRoutes)
 
 export default app;
