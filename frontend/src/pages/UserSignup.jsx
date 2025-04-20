@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const UserSignup = () => {
     const [formData, setFormData] = useState({
-        firstName: '',
+        fullName: '',
         lastName: '',
         email: '',
         password: '',
@@ -18,7 +18,7 @@ const UserSignup = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const payload = {
-            username: {
+            fullName: {
                 firstName: formData.firstName,
                 lastName: formData.lastName,
             },

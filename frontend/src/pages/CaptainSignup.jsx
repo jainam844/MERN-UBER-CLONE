@@ -30,7 +30,7 @@ const CaptainSignup = () => {
         }
 
         const payload = {
-            fullname: {
+            fullName: {
                 firstname: formData.firstname,
                 lastname: formData.lastname,
             },
