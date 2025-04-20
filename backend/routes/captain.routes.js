@@ -1,6 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator'; // ✅ Correct way to import
-import { registerCaptain } from '../controllers/captain.controller.js';
+import { getCaptainProfile, loginCaptain, logoutCaptain, registerCaptain } from '../controllers/captain.controller.js';
+import { authCaptain } from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.post('/register', [
@@ -14,4 +15,14 @@ router.post('/register', [
 ],
     registerCaptain
 )
+router.post('/login', [
+    body('email').isEmail().withMessage('Invalid Email'),
+    body('password').notEmpty().withMessage('Password is required')
+],
+    loginCaptain
+);
+
+router.get('/profile', authCaptain, getCaptainProfile);
+router.get('/logout', authCaptain, logoutCaptain);
+
 export default router;
