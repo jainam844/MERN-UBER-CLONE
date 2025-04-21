@@ -1,32 +1,54 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { UserDataContext } from '../context/UserDataContext';
+import apiRoutes from '../services/apiRoutes';
 
 const UserSignup = () => {
     const [formData, setFormData] = useState({
-        fullName: '',
+        firstName: '',
         lastName: '',
         email: '',
         password: '',
         confirmPassword: '',
     });
 
-
+    const navigate = useNavigate();
+    const { setUser } = useContext(UserDataContext);
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const payload = {
-            fullName: {
-                firstName: formData.firstName,
-                lastName: formData.lastName,
+
+        if (formData.password !== formData.confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
+
+        const newUser = {
+            fullname: {
+                firstname: formData.firstName,
+                lastname: formData.lastName,
             },
             email: formData.email,
             password: formData.password,
         };
-        console.log('Form Payload:', payload);
-        // Clear form (optional)
+
+        try {
+            const response = await axios.post(apiRoutes.registerUser, newUser);
+            if (response.status === 201) {
+                const data = response.data;
+                setUser(data.user);
+                localStorage.setItem('token', data.token);
+                navigate('/home');
+            }
+        } catch (error) {
+            console.error("Registration error:", error);
+            alert("Registration failed. Please try again.");
+        }
+
         setFormData({
             firstName: '',
             lastName: '',
@@ -34,8 +56,6 @@ const UserSignup = () => {
             password: '',
             confirmPassword: '',
         });
-
-        // Add your signup logic here (API call, etc.)
     };
 
     return (
@@ -85,7 +105,7 @@ const UserSignup = () => {
                         </div>
                     </div>
 
-                    <label className="block text-gray-700 font-medium mb-2">Email</label>
+                    <label className="block text-gray-700 font-medium mb-2 mt-4">Email</label>
                     <input
                         required
                         name="email"

@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserDataContext } from '../context/UserDataContext';
+import apiRoutes from '../services/apiRoutes';
+import axios from 'axios';
 
 const UserLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userData, setUserData] = useState({});
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserDataContext);
 
   const submitHanldler = async (e) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
-    setUserData({ email, password });
+    const user = {
+      email,
+      password,
+    };
+    // Simulate a login API call
+    try {
+      const response = await axios.post(apiRoutes.loginUser, user);
+      if (response.status === 200) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem('token', data.token);
+        navigate('/home');
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      alert("Registration failed. Please try again.");
+    }
+
     setEmail('');
     setPassword('');
   };
