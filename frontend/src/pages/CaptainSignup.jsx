@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import apiRoutes from '../services/apiRoutes';
+import { CaptainDataContext } from '../context/CaptainDataContext';
 
 const CaptainSignup = () => {
     const navigate = useNavigate();
+    const { setCaptain } = useContext(CaptainDataContext);
 
     const [formData, setFormData] = useState({
         firstname: '',
@@ -29,8 +32,8 @@ const CaptainSignup = () => {
             return;
         }
 
-        const payload = {
-            fullName: {
+        const captainData = {
+            fullname: {
                 firstname: formData.firstname,
                 lastname: formData.lastname,
             },
@@ -43,17 +46,20 @@ const CaptainSignup = () => {
                 vehicleType: formData.vehicleType,
             },
         };
-        console.log('Form Payload:', payload);
 
-        // try {
-        //     const response = await axios.post('/api/captain/register', payload); // update with actual endpoint
-        //     console.log('Signup successful:', response.data);
-        //     alert('Captain registered successfully!');
-        //     navigate('/login'); // or redirect elsewhere
-        // } catch (error) {
-        //     console.error('Error registering captain:', error);
-        //     alert(error.response?.data?.message || 'Something went wrong');
-        // }
+        try {
+            const response = await axios.post(apiRoutes.registerCaptain, captainData);
+
+            if (response.status === 201) {
+                const data = response.data;
+                setCaptain(data.captain);
+                localStorage.setItem('token', data.token);
+                navigate('/captain-home');
+            }
+        } catch (error) {
+            console.error('Error registering captain:', error);
+            alert(error.response?.data?.message || 'Something went wrong');
+        }
     };
 
     return (
@@ -112,6 +118,7 @@ const CaptainSignup = () => {
                         placeholder="Confirm Password"
                         className="w-full bg-gray-100 border px-3 py-2 rounded mt-4"
                     />
+
                     <h3 className="mt-6 mb-2 font-semibold text-gray-700">Vehicle Details</h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -145,15 +152,20 @@ const CaptainSignup = () => {
                             className="bg-gray-100 border px-3 py-2 rounded"
                         />
 
-                        <input
+                        <select
                             name="vehicleType"
-                            type="text"
                             value={formData.vehicleType}
                             onChange={handleChange}
                             required
-                            placeholder="Vehicle Type (Car, Bike)"
-                            className="bg-gray-100 border px-3 py-2 rounded"
-                        />
+                            className="bg-gray-100 border px-3 py-2 rounded mt-2 w-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        >
+                            <option value="" disabled>
+                                Select Vehicle Type
+                            </option>
+                            <option value="car">🚗 Car</option>
+                            <option value="motorcycle">🏍️ Motorcycle</option>
+                            <option value="auto">🚖 Auto</option>
+                        </select>
                     </div>
 
                     <button

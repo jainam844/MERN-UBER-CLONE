@@ -1,16 +1,36 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { CaptainDataContext } from '../context/CaptainDataContext';
+import axios from 'axios';
+import apiRoutes from '../services/apiRoutes';
 
 const CaptainLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [captainData, setCaptainData] = useState({});
+    const { setCaptain } = useContext(CaptainDataContext); // Make sure you're extracting setCaptain directly here
+    const navigate = useNavigate();
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        console.log('Captain Email:', email);
-        console.log('Captain Password:', password);
-        setCaptainData({ email, password });
+        const captain = {
+            email: email,
+            password
+        };
+
+        try {
+            const response = await axios.post(apiRoutes.loginCaptain, captain);
+
+            if (response.status === 200) {
+                const data = response.data;
+
+                setCaptain(data.captain); // This should work now
+                localStorage.setItem('token', data.token);
+                navigate('/captain-home');
+            }
+        } catch (error) {
+            console.error('Error logging in:', error);
+        }
+
         setEmail('');
         setPassword('');
     };

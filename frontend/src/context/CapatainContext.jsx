@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { CaptainDataContext } from './CaptainDataContext';
 
-const CapatainContext = () => {
+const CaptainContext = ({ children }) => {
     const [captain, setCaptain] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -11,18 +11,19 @@ const CapatainContext = () => {
 
     const value = {
         captain,
-        setCaptain,
+        setCaptain,    // Directly exposing setCaptain here
         isLoading,
         setIsLoading,
         error,
         setError,
         updateCaptain
     };
+
     return (
-        <CaptainDataContext.Provider value={{ value }}>
+        <CaptainDataContext.Provider value={value}>
             {children}
         </CaptainDataContext.Provider>
     );
 }
 
-export default CapatainContext
+export default CaptainContext;
