@@ -8,6 +8,7 @@ import UserProtectWrapper from "./pages/UserProtectWrapper";
 import Logout from "./pages/Logout";
 import CaptainSignup from "./pages/CaptainSignup";
 import CaptainHome from "./pages/CaptainHome";
+import CaptainProtectWrapper from "./pages/CaptainProtectWrapper";
 
 export default function App() {
   return (
@@ -29,9 +30,9 @@ export default function App() {
           </UserProtectWrapper>
         } />
         <Route path='/captain-home' element={
-          // <CaptainProtectWrapper>
+          <CaptainProtectWrapper>
           <CaptainHome />
-          // </CaptainProtectWrapper>
+          </CaptainProtectWrapper>
 
         } />
         <Route path="*" element={<div>404 Not Found</div>} />

@@ -7,6 +7,8 @@ const apiRoutes = {
     logOut: `${baseUrl}/users/logout`,
     registerCaptain: `${baseUrl}/captains/register`,
     loginCaptain: `${baseUrl}/captains/login`,
+    validateCaptainProfile: `${baseUrl}/captains/profile`,
+    validateUserProfile: `${baseUrl}/users/profile`,
 };
 
 export default apiRoutes;
