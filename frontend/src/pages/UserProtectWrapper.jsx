@@ -6,10 +6,10 @@ import apiRoutes from '../services/apiRoutes';
 
 const UserProtectWrapper = ({ children }) => {
     const navigate = useNavigate();
-    const { user, setUser } = useContext(UserDataContext)
-    const [ isLoading, setIsLoading ] = useState(true)
- 
-    
+    const { setUser } = useContext(UserDataContext)
+    const [loading, setIsLoading] = useState(true)
+
+
     useEffect(() => {
         const validateUser = async () => {
             const token = localStorage.getItem('token');
@@ -29,6 +29,7 @@ const UserProtectWrapper = ({ children }) => {
                     setIsLoading(false);
                 }
             } catch (err) {
+                console.error(err);
                 localStorage.removeItem('token');
                 navigate('/login');
             }

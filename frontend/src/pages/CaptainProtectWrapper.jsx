@@ -7,7 +7,7 @@ import { CaptainDataContext } from '../context/CaptainDataContext';
 const CaptainProtectWrapper = ({ children }) => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
-    const { captain, setCaptain } = useContext(CaptainDataContext);
+    const {setCaptain } = useContext(CaptainDataContext);
 
     useEffect(() => {
         const validateCaptain = async () => {
@@ -29,6 +29,7 @@ const CaptainProtectWrapper = ({ children }) => {
                     setIsLoading(false);
                 }
             } catch (err) {
+                console.error(err);
                 localStorage.removeItem('token');
                 navigate('/captain-login');
             }
