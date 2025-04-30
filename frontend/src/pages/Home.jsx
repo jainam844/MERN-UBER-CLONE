@@ -7,6 +7,9 @@ const Home = () => {
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState('')
   const [panelOpen, setPanelOpen] = useState(false)
+  const [vehicalePanel, setVehicalePanel] = useState(false)
+  const vehiclePanelRef = useRef(null)
+
   const panelRef = useRef(null)
   const panelCloseRef = useRef(null)
   useGSAP(function () {
@@ -31,6 +34,17 @@ const Home = () => {
     }
   }, [panelOpen])
 
+  useGSAP(function () {
+    if (vehicalePanel) {
+      gsap.to(vehiclePanelRef.current, {
+        transform: 'translateY(0)'
+      })
+    } else {
+      gsap.to(vehiclePanelRef.current, {
+        transform: 'translateY(100%)'
+      })
+    }
+  }, [vehicalePanel])
   const submitHanldler = async (e) => {
     e.preventDefault()
     console.log('submit')
@@ -43,7 +57,7 @@ const Home = () => {
         {/* <LiveTracking /> */}
         <img
           className="w-full h-full object-cover"
-          src="https://images.unsplash.com/photo-1604357209793-fca5dca89f97?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dhttps://images.unsplash.com/photo-1584972191378-d70853fc47fc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dhttps://images.unsplash.com/photo-1584972191378-d70853fc47fc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
           alt="Map"
         />
 
@@ -79,14 +93,44 @@ const Home = () => {
           </button>
         </div>
         <div className='bg-white h-0' ref={panelRef} >
-          <LocationSearchPanel/>
+          <LocationSearchPanel vehicalePanel={vehicalePanel} setVehicalePanel={setVehicalePanel} />
         </div>
       </div>
-      {/* <div ref={vehiclePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
-        <VehiclePanel
-            selectVehicle={setVehicleType}
-            fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
-    </div> */}
+      <div>
+        <div ref={vehiclePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full  bg-white px-3 py-10 pt-12'>
+          <h3 className='text-2xl font-semibold mb-5'>Choose a Vehicle</h3>
+          <div
+            className='flex border-2 active:border-black  mb-2 rounded-xl w-full p-3  items-center justify-between'>
+            <img className='h-10' src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg" alt="" />
+            <div className='ml-2 w-1/2'>
+              <h4 className='font-medium text-base'>UberGo <span><i className="ri-user-3-fill"></i>4</span></h4>
+              <h5 className='font-medium text-sm'>2 mins away </h5>
+              <p className='font-normal text-xs text-gray-600'>Affordable, compact rides</p>
+            </div>
+            <h2 className='text-lg font-semibold'>₹800</h2>
+          </div>
+          <div className='flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between'>
+            <img className='h-10' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_638,w_956/v1649231091/assets/2c/7fa194-c954-49b2-9c6d-a3b8601370f5/original/Uber_Moto_Orange_312x208_pixels_Mobile.png" alt="" />
+            <div className='-ml-2 w-1/2'>
+              <h4 className='font-medium text-base'>Moto <span><i className="ri-user-3-fill"></i>1</span></h4>
+              <h5 className='font-medium text-sm'>3 mins away </h5>
+              <p className='font-normal text-xs text-gray-600'>Affordable motorcycle rides</p>
+            </div>
+            <h2 className='text-lg font-semibold'>₹500</h2>
+          </div>
+          <div className='flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between'>
+            <img className='h-10' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1648431773/assets/1d/db8c56-0204-4ce4-81ce-56a11a07fe98/original/Uber_Auto_558x372_pixels_Desktop.png" alt="" />
+            <div className='ml-2 w-1/2'>
+              <h4 className='font-medium text-base'>UberAuto <span><i className="ri-user-3-fill"></i>3</span></h4>
+              <h5 className='font-medium text-sm'>3 mins away </h5>
+              <p className='font-normal text-xs text-gray-600'>Affordable Auto rides</p>
+            </div>
+            <h2 className='text-lg font-semibold'>₹600</h2>
+          </div>
+        </div>
+
+      </div>
+
       {/* <div ref={confirmRidePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12'>
         <ConfirmRide
             createRide={createRide}
