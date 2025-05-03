@@ -33,10 +33,9 @@ const getCoordinates = async (place) => {
 
 export const getDistanceBetweenPlaces = async (origin, destination) => {
     const apiKey = process.env.api_key;
-
     const originCoords = await getCoordinates(origin);
     const destinationCoords = await getCoordinates(destination);
-    console.log('Origin:', originCoords, 'Destination:', destinationCoords);
+
     const response = await axios.post(
         'https://api.openrouteservice.org/v2/directions/driving-car',
         {
@@ -54,14 +53,14 @@ export const getDistanceBetweenPlaces = async (origin, destination) => {
     if (!summary) {
         throw new Error('Route summary not found. Invalid coordinates or API limit reached.');
     }
-    const distanceInKm = (summary.distance / 1000).toFixed(2); // in kilometers
-    const durationInMin = (summary.duration / 60).toFixed(2);  // in minutes
+
+    const distanceInKm = (summary.distance / 1000); // in kilometers (numeric)
+    const durationInMin = (summary.duration / 60);  // in minutes (numeric)
 
     return {
-        distance: `${distanceInKm} km`,
-        duration: `${durationInMin} min`
+        distance: distanceInKm,
+        duration: durationInMin
     };
-    return summary;
 };
 
 export const getAutocompleteSuggestions = async (query) => {

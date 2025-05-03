@@ -5,7 +5,7 @@ import connectToDb from "./db/db.js";
 import userRoutes from './routes/user.routes.js';
 import captainRoutes from './routes/captain.routes.js'
 import mapsRoutes from './routes/maps.routes.js'
-
+import rideRoutes from './routes/ride.routes.js'
 import cookieParser from 'cookie-parser'
 dotenv.config();
 connectToDb();
@@ -24,6 +24,6 @@ app.get('/', (req, res) => {
 app.use('/users', userRoutes)
 app.use('/captains', captainRoutes)
 app.use('/maps', mapsRoutes)
-
+app.use('/rides', rideRoutes)
 
 export default app;
