@@ -1,11 +1,12 @@
 import express from 'express';
-import { getCoordinates } from '../controllers/map.controller';
-import { authUser } from '../middlewares/auth.middleware';
+import { getCoordinates } from '../controllers/map.controller.js';
+import { authUser } from '../middlewares/auth.middleware.js';
+import { query } from 'express-validator';
 const router = express.Router();
 
 // Example route with express-validator
 router.get('/get-coordinates',
-    query('address').isString().isLength({ min: 3 }),
+    query('text').isString().isLength({ min: 3 }),
     authUser,
     getCoordinates
 );

@@ -1,21 +1,22 @@
 
-module.exports.getAddressCoordinate = async (address) => {
-    const apiKey = process.env.GOOGLE_MAPS_API;
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+import axios from 'axios';
+
+export const getAddressCoordinate = async (address) => {
+    const apiKey = process.env.api_key; // Replace with your key or use dotenv
+    const url = `https://api.openrouteservice.org/geocode/search?api_key=${apiKey}&text=${encodeURIComponent(address)}`;
 
     try {
         const response = await axios.get(url);
-        if (response.data.status === 'OK') {
-            const location = response.data.results[ 0 ].geometry.location;
-            return {
-                ltd: location.lat,
-                lng: location.lng
-            };
+        const features = response.data.features;
+
+        if (features && features.length > 0) {
+            const [lng, lat] = features[0].geometry.coordinates;
+            return { lat, lng };
         } else {
-            throw new Error('Unable to fetch coordinates');
+            throw new Error('No coordinates found for this address.');
         }
     } catch (error) {
-        console.error(error);
+        console.error('Geocoding error:', error.message);
         throw error;
     }
-}
+};
