@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const ConfirmRidePopUp = (props) => {
     const navigate = useNavigate()
-
+    const [ otp, setOtp ] = useState('')
     const submitHander = (e) => {
         e.preventDefault();
         navigate('/captain-riding')
@@ -48,7 +48,7 @@ const ConfirmRidePopUp = (props) => {
 
                 <div className='mt-6 w-full'>
                     <form onSubmit={submitHander}>
-                        <input type="text" className='bg-[#eee] px-6 py-4 font-mono text-lg rounded-lg w-full mt-3' placeholder='Enter OTP' />
+                    <input value={otp} onChange={(e) => setOtp(e.target.value)} type="text" className='bg-[#eee] px-6 py-4 font-mono text-lg rounded-lg w-full mt-3' placeholder='Enter OTP' />
 
                         <button className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Confirm</button>
                         <button onClick={() => {
