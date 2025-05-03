@@ -1,6 +1,6 @@
 
 import { validationResult } from 'express-validator';
-import { getAddressCoordinate, getDistanceBetweenPlaces } from '../services/maps.service.js';
+import { getAddressCoordinate, getAutocompleteSuggestions, getDistanceBetweenPlaces } from '../services/maps.service.js';
 
 export const getCoordinates = async (req, res, next) => {
     const errors = validationResult(req);
@@ -25,13 +25,27 @@ export const getDistanceTime = async (req, res) => {
     }
 
     const { origin, destination } = req.body;
-console.log('Origin:', origin, 'Destination:', destination);
+    console.log('Origin:', origin, 'Destination:', destination);
     try {
         const result = await getDistanceBetweenPlaces(origin, destination);
-        res.status(200).json(result); // { distance: ..., duration: ... }
+        res.status(200).json(result);
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ message: error.message });
     }
 };
 
+export const getAutocomplete = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const { text } = req.query;
+    try {
+        const suggestions = await getAutocompleteSuggestions(text);
+        res.status(200).json(suggestions);
+    } catch (error) {
+        console.error('Autocomplete error:', error.message);
+        res.status(500).json({ message: 'Error fetching autocomplete suggestions' });
+    }
+}

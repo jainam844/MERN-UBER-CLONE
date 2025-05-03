@@ -28,11 +28,11 @@ const getCoordinates = async (place) => {
     const response = await axios.get(url);
     const coords = response.data.features[0]?.geometry?.coordinates;
     if (!coords) throw new Error(`Coordinates not found for: ${place}`);
-    return coords; 
+    return coords;
 };
 
 export const getDistanceBetweenPlaces = async (origin, destination) => {
-    const apiKey = process.env.api_key; 
+    const apiKey = process.env.api_key;
 
     const originCoords = await getCoordinates(origin);
     const destinationCoords = await getCoordinates(destination);
@@ -54,5 +54,35 @@ export const getDistanceBetweenPlaces = async (origin, destination) => {
     if (!summary) {
         throw new Error('Route summary not found. Invalid coordinates or API limit reached.');
     }
+    const distanceInKm = (summary.distance / 1000).toFixed(2); // in kilometers
+    const durationInMin = (summary.duration / 60).toFixed(2);  // in minutes
+
+    return {
+        distance: `${distanceInKm} km`,
+        duration: `${durationInMin} min`
+    };
     return summary;
+};
+
+export const getAutocompleteSuggestions = async (query) => {
+    const apiKey = process.env.api_key;
+    const url = `https://api.openrouteservice.org/geocode/autocomplete?api_key=${apiKey}&text=${encodeURIComponent(query)}`;
+
+    try {
+        const response = await axios.get(url);
+        const features = response.data.features;
+
+        if (features && features.length > 0) {
+            return features.map(feature => ({
+                name: feature.properties.label,
+                lat: feature.geometry.coordinates[1],
+                lon: feature.geometry.coordinates[0]
+            }));
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error('Autocomplete error:', error.message);
+        throw new Error('Error fetching autocomplete suggestions');
+    }
 };

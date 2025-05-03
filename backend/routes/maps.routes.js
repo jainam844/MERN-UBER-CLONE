@@ -1,5 +1,5 @@
 import express from 'express';
-import { getCoordinates, getDistanceTime } from '../controllers/map.controller.js';
+import { getAutocomplete, getCoordinates, getDistanceTime } from '../controllers/map.controller.js';
 import { authUser } from '../middlewares/auth.middleware.js';
 import { body, query } from 'express-validator';
 const router = express.Router();
@@ -15,4 +15,6 @@ router.post('/get-distance-time',
     body('destination').isString().isLength({ min: 3 }),
     getDistanceTime
 );
+router.get('/getAutocomplete', getAutocomplete);
+
 export default router;
