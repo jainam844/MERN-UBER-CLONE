@@ -1,10 +1,10 @@
 import { useGSAP } from '@gsap/react'
 import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import CaptainDetails from '../components/CaptainDetails'
-import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
+import CaptainDetails from '../../components/captainComponents/CaptainDetails'
+import ConfirmRidePopUp from '../../components/captainComponents/ConfirmRidePopUp'
 import gsap from 'gsap';
-import RidePopUp from '../components/RidePopUp'
+import RidePopUp from '../../components/captainComponents/RidePopup'
 
 const CaptainHome = () => {
 

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserDataContext } from '../context/UserDataContext';
 import axios from 'axios';
-import apiRoutes from '../services/apiRoutes';
+import { UserDataContext } from '../../context/UserDataContext';
+import apiRoutes from '../../services/apiRoutes';
 
 const UserProtectWrapper = ({ children }) => {
     const navigate = useNavigate();
@@ -36,11 +36,11 @@ const UserProtectWrapper = ({ children }) => {
         };
 
         validateUser();
-    }, [navigate, setUser]); // dependency array includes navigate and setUser
+    }, [navigate, setUser]);
 
     return (
         <>
-            {children}
+            {loading ? <div>Loading...</div> : children}
         </>
     );
 };

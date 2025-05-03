@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import FinishRide from '../components/FinishRide '
+import FinishRide from '../../components/captainComponents/FinishRide '
 const CaptainRiding = () => {
 
     const [finishRidePanel, setFinishRidePanel] = useState(false)

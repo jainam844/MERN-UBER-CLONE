@@ -1,17 +1,20 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import CaptainLogin from "./pages/CaptainLogin";
-import UserLogin from "./pages/UserLogin";
-import UserSignup from "./pages/UserSignup";
+import Home from "./pages/rider/Home";
+import UserLogin from "./pages/rider/UserLogin";
+import UserSignup from "./pages/rider/UserSignup";
+import UserProtectWrapper from "./pages/rider/UserProtectWrapper";
+import Logout from "./pages/rider/Logout";
+import Riding from "./pages/rider/Riding";
+
+import CaptainLogin from "./pages/captain/CaptainLogin";
+import CaptainSignup from "./pages/captain/CaptainSignup";
+import CaptainHome from "./pages/captain/CaptainHome";
+import CaptainProtectWrapper from "./pages/captain/CaptainProtectWrapper";
+import CaptainRiding from "./pages/captain/CaptainRiding";
+import CaptainLogout from "./pages/captain/CaptainLogout";
+
 import Start from "./pages/Start";
-import UserProtectWrapper from "./pages/UserProtectWrapper";
-import Logout from "./pages/Logout";
-import CaptainSignup from "./pages/CaptainSignup";
-import CaptainHome from "./pages/CaptainHome";
-import CaptainProtectWrapper from "./pages/CaptainProtectWrapper";
-import CaptainLogout from "./pages/CaptainLogout";
-import Riding from "./pages/Riding";
-import CaptainRiding from "./pages/CaptainRiding";
+
 import 'remixicon/fonts/remixicon.css'
 export default function App() {
   return (

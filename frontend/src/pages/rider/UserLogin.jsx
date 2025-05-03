@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserDataContext } from '../context/UserDataContext';
-import apiRoutes from '../services/apiRoutes';
+import { UserDataContext } from '../../context/UserDataContext';
+import apiRoutes from '../../services/apiRoutes';
 import axios from 'axios';
 
 const UserLogin = () => {
