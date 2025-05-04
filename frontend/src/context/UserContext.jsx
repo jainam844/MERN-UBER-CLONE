@@ -4,7 +4,7 @@ import { UserDataContext } from './UserDataContext';
 const UserContext = ({ children }) => {
     const [ user, setUser ] = useState({
         email: '',
-        fullName: {
+        useContext: {
             firstName: '',
             lastName: ''
         }

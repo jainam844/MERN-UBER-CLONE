@@ -7,7 +7,7 @@ import apiRoutes from '../../services/apiRoutes';
 const CaptainProtectWrapper = ({ children }) => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
-    const {setCaptain } = useContext(CaptainDataContext);
+    const { setCaptain } = useContext(CaptainDataContext);
 
     useEffect(() => {
         const validateCaptain = async () => {
@@ -25,7 +25,7 @@ const CaptainProtectWrapper = ({ children }) => {
                 });
 
                 if (response.status === 200) {
-                    setCaptain(response.data.captain);
+                    setCaptain(response.data);
                     setIsLoading(false);
                 }
             } catch (err) {
