@@ -13,6 +13,9 @@ const SocketProvider = ({ children }) => {
             console.log('Connected to server');
         });
 
+        // socket.on("new-ride", (data) => {
+        //     console.log("Received new ride:", data);
+        //   });
         socket.on('disconnect', () => {
             console.log('Disconnected from server');
         });

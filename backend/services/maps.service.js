@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import captainModel from '../models/captain.model.js';
 
 export const getAddressCoordinate = async (address) => {
     const apiKey = process.env.api_key;
@@ -12,7 +13,7 @@ export const getAddressCoordinate = async (address) => {
 
         if (features && features.length > 0) {
             const [lng, lat] = features[0].geometry.coordinates;
-            return { lat, lng };
+            return { ltd: lat, lng };
         } else {
             throw new Error('No coordinates found for this address.');
         }
@@ -85,3 +86,16 @@ export const getAutocompleteSuggestions = async (query) => {
         throw new Error('Error fetching autocomplete suggestions');
     }
 };
+
+export const getCaptainsInTheRadius = async (ltd, lng, radius) => {
+
+    const captains = await captainModel.find({
+        location: {
+            $geoWithin: {
+                $centerSphere: [[ltd, lng], radius / 6371]
+            }
+        }
+    });
+
+    return captains;
+}

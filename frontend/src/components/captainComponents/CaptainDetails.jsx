@@ -3,9 +3,7 @@ import React, { useContext } from 'react'
 import { CaptainDataContext } from '../../context/CaptainDataContext'
 
 const CaptainDetails = () => {
-
     const { captain } = useContext(CaptainDataContext)
-console.log(captain)
     return (
         <div>
             <div className='flex items-center justify-between'>
