@@ -154,7 +154,7 @@ const Home = () => {
   }
 
   async function createRide() {
-    const response = await axios.post(apiRoutes.createRide, {
+    await axios.post(apiRoutes.createRide, {
       pickup,
       destination,
       vehicleType
@@ -163,11 +163,7 @@ const Home = () => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
-    console.log(response.data)
-
   }
-console.log('fare', fare)
-console.log('vehicleType', vehicleType)
   return (
     <div className='h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
@@ -223,7 +219,7 @@ console.log('vehicleType', vehicleType)
         </div>
       </div>
       <div ref={vehiclePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full  bg-white px-3 py-10 pt-12'>
-        <VehiclePanel  selectVehicle={setVehicleType} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehicalePanel={setVehicalePanel} />
+        <VehiclePanel selectVehicle={setVehicleType} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehicalePanel={setVehicalePanel} />
       </div>
       <div ref={confirmRidePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full  bg-white px-3 py-10 pt-12'>
         <ConfirmRide
@@ -235,7 +231,11 @@ console.log('vehicleType', vehicleType)
           setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
       </div>
       <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 translate-y-full  bg-white px-3 py-10 pt-12'>
-        <LookingForDriver setVehicleFound={setVehicleFound} />
+        <LookingForDriver createRide={createRide}
+          vehicleType={vehicleType}
+          fare={fare}
+          pickup={pickup}
+          destination={destination} setVehicleFound={setVehicleFound} />
       </div>
       <div ref={waitingForDriverRef} className='fixed w-full  z-10 bottom-0  bg-white px-3 py-6 pt-12'>
         <WaitingForDriver setWaitingForDriver={setWaitingForDriver}
