@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import 'remixicon/fonts/remixicon.css'
@@ -9,6 +9,8 @@ import WaitingForDriver from '../../components/riderComponents/WaitingForDriver'
 import LookingForDriver from '../../components/riderComponents/LookingForDriver';
 import axios from 'axios';
 import apiRoutes from '../../services/apiRoutes';
+import { SocketContext } from '../../context/SocketContext';
+import { UserDataContext } from '../../context/UserDataContext';
 const Home = () => {
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState('')
@@ -28,6 +30,12 @@ const Home = () => {
   const panelCloseRef = useRef(null)
   const vehicleFoundRef = useRef(null)
   const waitingForDriverRef = useRef(null)
+  const { socket } = useContext(SocketContext)
+  const { user } = useContext(UserDataContext)
+
+  useEffect(() => {
+    socket.emit("join", { userType: "user", userId: user._id })
+  }, [user])
 
   useGSAP(function () {
     if (panelOpen) {

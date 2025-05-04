@@ -11,7 +11,6 @@ const CaptainContext = ({ children }) => {
     };
 
     useEffect(() => {
-        console.log('Captain state updated:', captain);
     }, [captain]);
 
     const value = {
