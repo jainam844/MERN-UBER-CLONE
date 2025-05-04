@@ -15,6 +15,6 @@ router.post('/get-distance-time',
     body('destination').isString().isLength({ min: 3 }),
     getDistanceTime
 );
-router.get('/getAutocomplete', getAutocomplete);
+router.get('/get-suggestions', getAutocomplete);
 
 export default router;
