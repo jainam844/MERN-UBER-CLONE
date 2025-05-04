@@ -20,6 +20,8 @@ const Home = () => {
   const [pickupSuggestions, setPickupSuggestions] = useState([])
   const [destinationSuggestions, setDestinationSuggestions] = useState([])
   const [activeField, setActiveField] = useState(null)
+  const [fare, setFare] = useState({})
+  const [vehicleType, setVehicleType] = useState(null)
   const vehiclePanelRef = useRef(null)
   const confirmRidePanelRef = useRef(null)
   const panelRef = useRef(null)
@@ -100,6 +102,7 @@ const Home = () => {
   const submitHanldler = async (e) => {
     e.preventDefault()
   }
+
   const handlePickupChange = async (e) => {
     setPickup(e.target.value)
     try {
@@ -117,6 +120,7 @@ const Home = () => {
       // handle error
     }
   }
+
   const handleDestinationChange = async (e) => {
     setDestination(e.target.value)
     try {
@@ -134,6 +138,36 @@ const Home = () => {
 
     }
   }
+
+  async function findTrip() {
+    setVehicalePanel(true)
+    setPanelOpen(false)
+
+    const response = await axios.get(apiRoutes.getRide, {
+      params: { pickup, destination },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    console.log(response.data)
+    setFare(response.data)
+  }
+
+  async function createRide() {
+    const response = await axios.post(apiRoutes.createRide, {
+      pickup,
+      destination,
+      vehicleType
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    console.log(response.data)
+
+  }
+console.log('fare', fare)
+console.log('vehicleType', vehicleType)
   return (
     <div className='h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
@@ -174,7 +208,7 @@ const Home = () => {
               type="text"
               placeholder='Enter your destination' />
           </form>
-          <button className='bg-black text-white px-4 py-2 rounded-lg mt-3 w-full'>
+          <button onClick={findTrip} className='bg-black text-white px-4 py-2 rounded-lg mt-3 w-full'>
             Find Trip
           </button>
         </div>
@@ -189,10 +223,15 @@ const Home = () => {
         </div>
       </div>
       <div ref={vehiclePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full  bg-white px-3 py-10 pt-12'>
-        <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehicalePanel={setVehicalePanel} />
+        <VehiclePanel  selectVehicle={setVehicleType} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehicalePanel={setVehicalePanel} />
       </div>
       <div ref={confirmRidePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full  bg-white px-3 py-10 pt-12'>
         <ConfirmRide
+          createRide={createRide}
+          vehicleType={vehicleType}
+          fare={fare}
+          pickup={pickup}
+          destination={destination}
           setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
       </div>
       <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 translate-y-full  bg-white px-3 py-10 pt-12'>

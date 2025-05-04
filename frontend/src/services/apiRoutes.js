@@ -11,6 +11,8 @@ const apiRoutes = {
     validateUserProfile: `${baseUrl}/users/profile`,
     captainLogout: `${baseUrl}/captains/logout`,
     getMapSuggestions: `${baseUrl}/maps/get-suggestions`,
+    getRide: `${baseUrl}/rides/get-fare`,
+    createRide: `${baseUrl}/rides/create`,
 };
 
 export default apiRoutes;
