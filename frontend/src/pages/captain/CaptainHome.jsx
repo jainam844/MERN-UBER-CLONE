@@ -46,16 +46,15 @@ const CaptainHome = () => {
         updateLocation();
 
         const handleNewRide = (data) => {
-            console.log("Received ride:", data);
-            setRide(data); // Set ride to show it in popup
-            setRidePopupPanel(true); // Open the popup
+            setRide(data); 
+            setRidePopupPanel(true); 
         };
 
         socket.on('new-ride', handleNewRide);
 
         return () => {
             clearInterval(locationInterval);
-            socket.off('new-ride', handleNewRide); // Cleanup on unmount
+            socket.off('new-ride', handleNewRide); 
         };
     }, [socket, captain]);
 

@@ -1,13 +1,30 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import apiRoutes from '../../services/apiRoutes'
 
 const ConfirmRidePopUp = (props) => {
     const navigate = useNavigate()
-    const [ otp, setOtp ] = useState('')
-    const submitHander = (e) => {
-        e.preventDefault();
-        navigate('/captain-riding')
+    const [otp, setOtp] = useState('')
+    const submitHander = async (e) => {
+        e.preventDefault()
+        const response = await axios.get(apiRoutes.startRide, {
+            params: {
+                rideId: props.ride._id,
+                otp: otp
+            },
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+
+        if (response.status === 200) {
+            props.setConfirmRidePopupPanel(false)
+            props.setRidePopupPanel(false)
+            navigate('/captain-riding', { state: { ride: props.ride } })
+        }
     }
+
     return (
         <div>
             <h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
@@ -48,7 +65,7 @@ const ConfirmRidePopUp = (props) => {
 
                 <div className='mt-6 w-full'>
                     <form onSubmit={submitHander}>
-                    <input value={otp} onChange={(e) => setOtp(e.target.value)} type="text" className='bg-[#eee] px-6 py-4 font-mono text-lg rounded-lg w-full mt-3' placeholder='Enter OTP' />
+                        <input value={otp} onChange={(e) => setOtp(e.target.value)} type="text" className='bg-[#eee] px-6 py-4 font-mono text-lg rounded-lg w-full mt-3' placeholder='Enter OTP' />
 
                         <button className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Confirm</button>
                         <button onClick={() => {

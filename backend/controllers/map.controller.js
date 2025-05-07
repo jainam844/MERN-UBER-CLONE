@@ -25,7 +25,6 @@ export const getDistanceTime = async (req, res) => {
     }
 
     const { origin, destination } = req.body;
-    console.log('Origin:', origin, 'Destination:', destination);
     try {
         const result = await getDistanceBetweenPlaces(origin, destination);
         res.status(200).json(result);

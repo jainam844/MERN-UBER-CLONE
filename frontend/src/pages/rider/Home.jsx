@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { use, useContext, useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import 'remixicon/fonts/remixicon.css'
@@ -11,6 +11,8 @@ import axios from 'axios';
 import apiRoutes from '../../services/apiRoutes';
 import { SocketContext } from '../../context/SocketContext';
 import { UserDataContext } from '../../context/UserDataContext';
+import { useNavigate } from 'react-router-dom';
+
 const Home = () => {
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState('')
@@ -33,6 +35,7 @@ const Home = () => {
   const { socket } = useContext(SocketContext)
   const { user } = useContext(UserDataContext)
   const [ride, setRide] = useState(null)
+  const navigate = useNavigate()
   useEffect(() => {
     socket.emit("join", { userType: "user", userId: user._id })
   }, [user])
@@ -157,7 +160,6 @@ const Home = () => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
-    console.log(response.data)
     setFare(response.data)
   }
 
@@ -174,20 +176,28 @@ const Home = () => {
   }
   useEffect(() => {
     const handleRideConfirmed = (ride) => {
-      console.log("Ride confirmed in Home:", ride);
       setVehicleFound(false);
       setWaitingForDriver(true);
       setRide(ride);
     };
-  
+
     socket.on('ride-confirmed', handleRideConfirmed);
-  
+
     return () => {
       socket.off('ride-confirmed', handleRideConfirmed); // cleanup
     };
   }, [socket]);
-  
 
+  useEffect(() => {
+    const handleRideStrated = (ride) => {
+      setWaitingForDriver(false);
+      navigate('/riding', { state: { ride } })
+    };
+    socket.on('ride-started', handleRideStrated);
+    return () => {
+      socket.off('ride-started', handleRideStrated);
+    };
+  })
 
   return (
     <div className='h-screen relative overflow-hidden'>

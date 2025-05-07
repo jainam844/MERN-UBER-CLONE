@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { createRide, getFareDistance } from "../services/ride.service.js";
+import { createRide, getFareDistance, startRideForUser } from "../services/ride.service.js";
 import { getAddressCoordinate, getCaptainsInTheRadius } from "../services/maps.service.js";
 import { sendMessageToSocketId } from "../socket.js";
 import rideModel from "../models/ride.model.js";
@@ -63,5 +63,25 @@ export const confirmRide = async (req, res) => {
         console.error('Error confirming ride:', error);
         return res.status(500).json({ message: 'Internal server error' });
 
+    }
+}
+export const startRide = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { rideId, otp } = req.query;
+
+    try {
+        const ride = await startRideForUser({ rideId, otp, captain: req.captain });
+        sendMessageToSocketId(ride.user.socketId, {
+            event: 'ride-started',
+            data: ride
+        })
+
+        return res.status(200).json(ride);
+    } catch (err) {
+        return res.status(500).json({ message: err.message });
     }
 }
