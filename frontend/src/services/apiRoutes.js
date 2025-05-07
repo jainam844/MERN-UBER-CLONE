@@ -15,6 +15,7 @@ const apiRoutes = {
     createRide: `${baseUrl}/rides/create`,
     confirmRide: `${baseUrl}/rides/confirm`,
     startRide: `${baseUrl}/rides/start-ride`,
+    endRide: `${baseUrl}/rides/end-ride`,
 };
 
 export default apiRoutes;

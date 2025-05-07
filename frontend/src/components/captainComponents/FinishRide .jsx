@@ -1,7 +1,23 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import apiRoutes from '../../services/apiRoutes'
 
 const FinishRide = (props) => {
+    const navigate = useNavigate()
+    async function endRide(e) {
+        e.preventDefault()
+        const response = await axios.post(apiRoutes.endRide, {
+            rideId: props.ride._id
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        if (response.status === 200) {
+            navigate('/captain-home')
+        }
+    }
     return (
         <div>
             <h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
@@ -11,7 +27,7 @@ const FinishRide = (props) => {
             <div className='flex items-center justify-between p-4 border-2 border-yellow-400 rounded-lg mt-4'>
                 <div className='flex items-center gap-3 '>
                     <img className='h-12 rounded-full object-cover w-12' src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg" alt="" />
-                    <h2 className='text-lg font-medium'>{'jainam shah'}</h2>
+                    <h2 className='text-lg font-medium'>{props.ride?.user.fullname.firstname}</h2>
                 </div>
                 <h5 className='text-lg font-semibold'>2.2 KM</h5>
             </div>
@@ -41,8 +57,9 @@ const FinishRide = (props) => {
                 </div>
 
                 <div className='mt-10 w-full'>
-                    <Link to="/captain-home" className='w-full mt-5 flex  text-lg justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Finish Ride</Link>
-                </div>
+                    <button
+                        onClick={endRide}
+                        className='w-full mt-5 flex  text-lg justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Finish Ride</button>                </div>
             </div>
         </div>
     )

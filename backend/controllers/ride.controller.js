@@ -1,9 +1,9 @@
 import { validationResult } from "express-validator";
-import { createRide, getFareDistance, startRideForUser } from "../services/ride.service.js";
+import { createRide, endRideForUser, getFareDistance, startRideForUser } from "../services/ride.service.js";
 import { getAddressCoordinate, getCaptainsInTheRadius } from "../services/maps.service.js";
 import { sendMessageToSocketId } from "../socket.js";
 import rideModel from "../models/ride.model.js";
-import {confirmRideforUser} from "../services/ride.service.js";
+import { confirmRideforUser } from "../services/ride.service.js";
 export const createRides = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -84,4 +84,24 @@ export const startRide = async (req, res) => {
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
+}
+export const endRide = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const { rideId } = req.body;
+    try {
+        const ride = await endRideForUser({ rideId, captain: req.captain });
+        sendMessageToSocketId(ride.user.socketId, {
+            event: 'ride-ended',
+            data: ride
+        })
+
+        return res.status(200).json(ride);
+    } catch (err) {
+        console.error('Error ending ride:', err);
+        return res.status(500).json({ message: err.message });
+    }
+
 }
