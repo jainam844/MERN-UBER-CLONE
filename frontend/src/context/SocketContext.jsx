@@ -12,10 +12,14 @@ const SocketProvider = ({ children }) => {
         socket.on('connect', () => {
             console.log('Connected to server');
         });
+        // socket.on('ride-confirmed', ride => {
+        //   console.log("Ride confirmed:", ride);
+        // })
 
         // socket.on("new-ride", (data) => {
         //     console.log("Received new ride:", data);
         //   });
+
         socket.on('disconnect', () => {
             console.log('Disconnected from server');
         });

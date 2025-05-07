@@ -13,6 +13,7 @@ const apiRoutes = {
     getMapSuggestions: `${baseUrl}/maps/get-suggestions`,
     getRide: `${baseUrl}/rides/get-fare`,
     createRide: `${baseUrl}/rides/create`,
+    confirmRide: `${baseUrl}/rides/confirm`,
 };
 
 export default apiRoutes;

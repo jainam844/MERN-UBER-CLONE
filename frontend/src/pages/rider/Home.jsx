@@ -32,7 +32,7 @@ const Home = () => {
   const waitingForDriverRef = useRef(null)
   const { socket } = useContext(SocketContext)
   const { user } = useContext(UserDataContext)
-
+  const [ride, setRide] = useState(null)
   useEffect(() => {
     socket.emit("join", { userType: "user", userId: user._id })
   }, [user])
@@ -172,6 +172,23 @@ const Home = () => {
       }
     })
   }
+  useEffect(() => {
+    const handleRideConfirmed = (ride) => {
+      console.log("Ride confirmed in Home:", ride);
+      setVehicleFound(false);
+      setWaitingForDriver(true);
+      setRide(ride);
+    };
+  
+    socket.on('ride-confirmed', handleRideConfirmed);
+  
+    return () => {
+      socket.off('ride-confirmed', handleRideConfirmed); // cleanup
+    };
+  }, [socket]);
+  
+
+
   return (
     <div className='h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
@@ -246,7 +263,7 @@ const Home = () => {
           destination={destination} setVehicleFound={setVehicleFound} />
       </div>
       <div ref={waitingForDriverRef} className='fixed w-full  z-10 bottom-0  bg-white px-3 py-6 pt-12'>
-        <WaitingForDriver setWaitingForDriver={setWaitingForDriver}
+        <WaitingForDriver ride={ride} setWaitingForDriver={setWaitingForDriver} setVehicleFound={setVehicleFound}
           waitingForDriver={waitingForDriver} />
       </div>
     </div>
