@@ -12,6 +12,7 @@ import apiRoutes from '../../services/apiRoutes';
 import { SocketContext } from '../../context/SocketContext';
 import { UserDataContext } from '../../context/UserDataContext';
 import { useNavigate } from 'react-router-dom';
+import LiveTracking from '../../components/LiveTracking';
 
 const Home = () => {
   const [pickup, setPickup] = useState('')
@@ -40,27 +41,52 @@ const Home = () => {
     socket.emit("join", { userType: "user", userId: user._id })
   }, [user])
 
-  useGSAP(function () {
+  useGSAP(() => {
     if (panelOpen) {
+      // Animate input panel up
       gsap.to(panelRef.current, {
         height: '70%',
-        padding: 24
-        // opacity:1
-      })
+        padding: 24,
+        duration: 0.5,
+        ease: 'power2.out'
+      });
+
+      // Show close button
       gsap.to(panelCloseRef.current, {
-        opacity: 1
-      })
+        opacity: 1,
+        duration: 0.3
+      });
+
+      // Move the map down
+      gsap.to(mapRef.current, {
+        y: 200, // or whatever value fits visually
+        duration: 0.5,
+        ease: 'power2.out'
+      });
     } else {
+      // Animate input panel down
       gsap.to(panelRef.current, {
         height: '0%',
-        padding: 0
-        // opacity:0
-      })
+        padding: 0,
+        duration: 0.5,
+        ease: 'power2.inOut'
+      });
+
+      // Hide close button
       gsap.to(panelCloseRef.current, {
-        opacity: 0
-      })
+        opacity: 0,
+        duration: 0.3
+      });
+
+      // Move the map back to normal
+      gsap.to(mapRef.current, {
+        y: 0,
+        duration: 0.5,
+        ease: 'power2.inOut'
+      });
     }
-  }, [panelOpen])
+  }, [panelOpen]);
+
 
   useGSAP(function () {
     if (vehicalePanel) {
@@ -198,20 +224,17 @@ const Home = () => {
       socket.off('ride-started', handleRideStrated);
     };
   })
+  const mapRef = useRef(null);
 
   return (
     <div className='h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
-      <div className='h-screen w-screen'>
-        <img
-          className="w-full h-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt="Map"
-        />
-
+      <div ref={mapRef} className='h-screen w-screen relative z-0'>
+        <LiveTracking />
       </div>
+
       <div className=' flex flex-col justify-end h-screen absolute top-0 w-full'>
-        <div className='h-[30%] p-6 bg-white relative'>
+        <div ref={panelRef} className='h-[30%] p-6 bg-white relative'>
           <h5 ref={panelCloseRef} onClick={() => {
             setPanelOpen(false)
           }} className='absolute opacity-0 right-6 top-6 text-2xl'>
